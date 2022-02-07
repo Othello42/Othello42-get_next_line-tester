@@ -3,9 +3,12 @@ CFLAGS = -Wall -Wextra -Werror
 
 PROJECT = ../get_next_line/
 
-SRC = $(SRC_FT) $(SRC_TEST)
-SRC_FT = $(PROJECT)get_next_line.c\
+SRC =	$(SRC_FT) $(SRC_TEST)
+SRC_FT =	$(PROJECT)get_next_line.c\
 			$(PROJECT)get_next_line_utils.c
+SRC_BON =	$(SRC_BON_FT) $(SRC_TEST)
+SRC_BON_FT =	$(PROJECT)get_next_line_bonus.c\
+				$(PROJECT)get_next_line_utils_bonus.c
 MN_MAN = main_mandatory.c
 MN_BON = main_bonus.c
 SRC_TEST = 	utils.c\
@@ -33,7 +36,7 @@ norm: frame
 	@$(CC) $(CFLAGS) frame.c -D BANNER=4 -D PROJECT='"$(PROJECT)"' && ./a.out
 
 bonus: headbon
-	@$(CC) $(CFLAGS) $(MN_BON) $(SRC) -D BUFFER_SIZE=42 -D PROJECT='"$(PROJECT)"' && ./a.out;\
+	@$(CC) $(CFLAGS) $(MN_BON) $(SRC_BON) -D BUFFER_SIZE=42 -D PROJECT='"$(PROJECT)"' && ./a.out;\
 
 temp: frame
 	gcc temp.c ../get_next_line/get_next_line.c ../get_next_line/get_next_line_utils.c -D BUFFER_SIZE=42 && ./a.out
