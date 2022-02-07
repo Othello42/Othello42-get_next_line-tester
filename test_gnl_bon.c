@@ -17,8 +17,8 @@ void	check_gnl_bonus_static(void)
 	int	total;
 
 	printf(C_BOLD"\nMaximum of 1 static variable"C_RESET"\n");
-	count_gnl = count_static_file("../get_next_line/get_next_line.c"); //PATH
-	count_utils = count_static_file("../get_next_line/get_next_line_utils.c"); //PATH
+	count_gnl = count_static_file(PROJECT"get_next_line.c"); //PATH
+	count_utils = count_static_file(PROJECT"get_next_line_utils.c"); //PATH
 	total = count_gnl + count_utils;
 	if (total == 0 || total == 1)
 		printf(C_GREEN"[OK]"C_RESET" ");
