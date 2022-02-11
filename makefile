@@ -3,7 +3,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
-#adjust to get_next_line.c's ciredtory location
+#adjust to get_next_line.c's directory location
 PROJECT = ../get_next_line/
 
 #adjust if nececary to find your files.
