@@ -1,12 +1,21 @@
 #include "h_get_next_line_check.h"
 #include "h_colors.h"
 
+#include <strings.h> //strcmp, strnstr
 #include <fcntl.h> //open
-#include <unistd.h> //read
-#include <string.h> //strnstr
+#include <unistd.h> //read, close
 #include <stdlib.h> //random
 #include <time.h> //time
 
+/* ====================================||==================================== *\
+||																			  ||
+||																			  ||
+||							Bonus: Check for Static							  ||
+||																			  ||
+||																			  ||
+\* ============get_next_line===========||==============©Othello============== */
+
+static int	count_static_file(char *file);
 static int	move_to_first_function(char *buff);
 static int	counter(char *buff);
 
@@ -30,7 +39,7 @@ void	check_gnl_bonus_static(void)
 	}
 }
 
-int	count_static_file(char *file)
+static int	count_static_file(char *file)
 {
 	char	buff[25000];
 	int		fd;
@@ -98,6 +107,16 @@ static int	counter(char *buff)
 	return (count);
 }
 
+/* ====================================||==================================== *\
+||																			  ||
+||									 Bonus:									  ||
+||					  Check for multiple File Descriptors					  ||
+||								In random order								  ||
+||																			  ||
+\* ============get_next_line===========||==============©Othello============== */
+
+static void	create_bonus_check_array(char ***check_array);
+
 void	check_gnl_bonus_random(void)
 {
 	int		gnl_fd[5];
@@ -111,12 +130,13 @@ void	check_gnl_bonus_random(void)
 	check_array = create_check_array();
 	create_bonus_check_array(check_array);
 	printf(C_BOLD"\nMultiple file descriptors, in randomized order."C_RESET"\n");
-	gnl_fd[0] = open("fd_bonus0", O_RDONLY);
-	gnl_fd[1] = open("fd_bonus1", O_RDONLY);
-	gnl_fd[2] = open("fd_bonus2", O_RDONLY);
-	gnl_fd[3] = open("fd_bonus3", O_RDONLY);
-	gnl_fd[4] = open("fd_bonus4", O_RDONLY);
+	gnl_fd[0] = open("file/fd_bonus0", O_RDONLY);
+	gnl_fd[1] = open("file/fd_bonus1", O_RDONLY);
+	gnl_fd[2] = open("file/fd_bonus2", O_RDONLY);
+	gnl_fd[3] = open("file/fd_bonus3", O_RDONLY);
+	gnl_fd[4] = open("file/fd_bonus4", O_RDONLY);
 	i = 0;
+	srandom(time(0));
 	while (i <= 42)
 	{
 		random_check = (random() % 5);
@@ -148,20 +168,20 @@ void	check_gnl_bonus_random(void)
 	close(gnl_fd[4]);
 }
 
-void	create_bonus_check_array(char ***check_array)
+static void	create_bonus_check_array(char ***check_array)
 {
 	int	fd[5];
 	int	i;
 
 	i = 0;
-	fd[0] = open("fd_bonus0", O_RDONLY);
-	fd[1] = open("fd_bonus1", O_RDONLY);
-	fd[2] = open("fd_bonus2", O_RDONLY);
-	fd[3] = open("fd_bonus3", O_RDONLY);
-	fd[4] = open("fd_bonus4", O_RDONLY);
+	fd[0] = open("file/fd_bonus0", O_RDONLY);
+	fd[1] = open("file/fd_bonus1", O_RDONLY);
+	fd[2] = open("file/fd_bonus2", O_RDONLY);
+	fd[3] = open("file/fd_bonus3", O_RDONLY);
+	fd[4] = open("file/fd_bonus4", O_RDONLY);
 	while (i <= 4)
 	{
-		add_to_check_array(check_array, fd[i], i);
+		add_to_check_array(check_array, fd[i], i, 42); //42 is random hardcoded
 		close(fd[i]);
 		i++;
 	}

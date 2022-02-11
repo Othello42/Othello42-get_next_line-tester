@@ -2,24 +2,31 @@
 #include "h_colors.h"
 #include "h_os_version.h"
 
+#include <strings.h> //bzero, strcmp, strlen
 #include <fcntl.h> //open
 #include <unistd.h> //read, close
-#include <stdio.h> //printf
-#include <strings.h> //bzero
-#include <stdlib.h> //system
+#include <stdlib.h> //calloc, system, exit
+
+/* ====================================||==================================== *\
+||																			  ||
+||								  Create Array								  ||
+||						To compare against get_next_line					  ||
+||																			  ||
+||																			  ||
+\* ============get_next_line===========||==============©Othello============== */
 
 char	***create_check_array(void)
 {
 	static char	***array;
 
-	// if (!array)
+	if (!array)
 		array = (char ***)calloc(sizeof(char **), 256);
 	return (array);
 }
 
-void	add_to_check_array(char ***array, int fd, int num)
+void	add_to_check_array(char ***array, int fd, int num, int lines)
 {
-	char	buff[0xfff];
+	char	buff[0xfffff];
 	int		max;
 	int		i;
 	int		line;
@@ -30,11 +37,12 @@ void	add_to_check_array(char ***array, int fd, int num)
 	c = 0;
 	if (!array[num])
 		array[num] = (char **)calloc(sizeof(char *), 256);
-	max = read(fd, buff, 0xfff);
+	bzero(buff, 0xfffff);
+	max = read(fd, buff, 0xfffff);
 	while (i < max)
 	{
 		if (!array[num][line])
-			array[num][line] = (char *)calloc(sizeof(char), 0xfff);
+			array[num][line] = (char *)calloc(sizeof(char), 0xfffff);
 		array[num][line][c] = buff[i];
 		if (array[num][line][c] == '\n')
 		{
@@ -45,7 +53,21 @@ void	add_to_check_array(char ***array, int fd, int num)
 			c++;
 		i++;
 	}
+	while (line < lines)
+	{
+		if (!array[num][line])
+			array[num][line] = NULL;
+		line++;
+	}
 }
+
+/* ====================================||==================================== *\
+||																			  ||
+||																			  ||
+||								  Leak Checks								  ||
+||																			  ||
+||																			  ||
+\* ============get_next_line===========||==============©Othello============== */
 
 void	leak_check(void)
 {
@@ -63,25 +85,62 @@ void	leak_check_apple(int should)
 	int		fd;
 	char	buff[99];
 
-	system("leaks a.out | grep leaked | cut -f2 -d: > temp_leaks_gnl");
+	system("leaks test.out | grep leaked | cut -f2 -d: > temp_leaks_gnl");
 	fd = open("temp_leaks_gnl", O_RDONLY);
 	read (fd, buff, 99);
 	close (fd);
 	if (strncmp(buff, " 0 leaks for 0 total leaked bytes.", 34) != 0)
 	{
 		if (should == 1)
-			printf(C_ORANGE"[LK]"C_RESET" ");
+			printf(C_ORANGE"\t[LK]"C_RESET" ");
 		else
-			printf(C_RED"[CHEAT]"C_RESET" ");
+			printf(C_RED"\t[CHEAT]"C_RESET" ");
 		fd = errorlog_fd(1);
 		dprintf(fd, "get_next_line leaks:\n");
 		dprintf(fd, "%s\n\n", buff);
 	}
 	else
 		if (should == 1)
-			printf(C_BLUE"[LK]"C_RESET" ");
+			printf(C_BLUE"\t[LK]"C_RESET" ");
 	system("rm temp_leaks_gnl");
 }
+
+/* ====================================||==================================== *\
+||																			  ||
+||																			  ||
+||							   Print name of test							  ||
+||																			  ||
+||																			  ||
+\* ============get_next_line===========||==============©Othello============== */
+
+void	print_test_name(char *name)
+{
+	int		len;
+	char	longest[] = "file/fd_Line Lengths";
+	int		mod;
+	int		max;
+
+	mod = 8;
+	max = strlen(longest) - mod + 1;
+	max = max - (max % 8) + 8;
+	len = strlen(name) - mod + 1;
+	len = len - (len % 8) + 8;
+	len = (max - len) / 8;
+	printf(C_BOLD"\n%s:"C_RESET"\t", &name[8]);
+	while (len > 0)
+	{
+		printf("\t");
+		len--;
+	}
+}
+
+/* ====================================||==================================== *\
+||																			  ||
+||																			  ||
+||									Errorlog								  ||
+||																			  ||
+||																			  ||
+\* ============get_next_line===========||==============©Othello============== */
 
 int	errorlog_fd(int command)
 {
@@ -95,4 +154,32 @@ int	errorlog_fd(int command)
 	else
 		close(errorfd);
 	return (errorfd);
+}
+
+void	print_error(char *fd, char *next_line, char **check_array, int i)
+{
+	int	fd_err;
+
+	fd_err = errorlog_fd(1);
+	dprintf(fd_err, "======= TEST FAILED =======\n");
+	dprintf(fd_err, "File:\t\t\t%s\n", fd);
+	dprintf(fd_err, "BUFFER_SIZE:\t%i\n", BUFFER_SIZE);
+	dprintf(fd_err, "Line:\t\t\t%i\n\n", i + 1);
+	dprintf(fd_err, "expected(%lu):\t\t%s\n", strlen(check_array[i]), check_array[i]);
+	dprintf(fd_err, "get_next_line(%lu):\t%s\n", strlen(next_line), next_line);
+}
+
+/* ====================================||==================================== *\
+||																			  ||
+||																			  ||
+||								Error protection							  ||
+||																			  ||
+||																			  ||
+\* ============get_next_line===========||==============©Othello============== */
+
+void	ft_error(int num)
+{
+	if(num == 11)
+	printf(C_RED"[SIGSEGV]"C_RESET" ");
+	exit (0);
 }

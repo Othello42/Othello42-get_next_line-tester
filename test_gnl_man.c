@@ -1,23 +1,20 @@
 #include "h_get_next_line_check.h"
 #include "h_colors.h"
 
-#include <unistd.h> //close
 #include <string.h> //strcmp
 #include <stdlib.h> //free
 #include <fcntl.h> //open
+#include <unistd.h> //close
 
-void	print_error(char *fd, char *next_line, char **check_array, int i)
-{
-	int	fd_err;
+/* ====================================||==================================== *\
+||																			  ||
+||																			  ||
+||							  Check get_next_line							  ||
+||																			  ||
+||																			  ||
+\* ============get_next_line===========||==============©Othello============== */
 
-	fd_err = errorlog_fd(1);
-	dprintf(fd_err, "======= TEST FAILED =======\n");
-	dprintf(fd_err, "File:\t\t\t%s\n", fd);
-	dprintf(fd_err, "BUFFER_SIZE:\t%i\n", BUFFER_SIZE);
-	dprintf(fd_err, "Line:\t\t\t%i\n\n", i + 1);
-	dprintf(fd_err, "expected(%lu):\t\t%s\n", strlen(check_array[i]), check_array[i]);
-	dprintf(fd_err, "get_next_line(%lu):\t%s\n", strlen(next_line), next_line);
-}
+static void	check_the_line(char **check_array, char *fd, int lines);
 
 void	check_gnl(char *name, char ***check_array, int num, int lines)
 {
@@ -28,12 +25,12 @@ void	check_gnl(char *name, char ***check_array, int num, int lines)
 	else
 		printf("\t");
 	check = open(name, O_RDONLY);
-	add_to_check_array(check_array, check, num);
+	add_to_check_array(check_array, check, num, lines);
 	close(check);
 	check_the_line(check_array[num], name, lines);
 }
 
-void	check_the_line(char **check_array, char *fd, int lines)
+static void	check_the_line(char **check_array, char *fd, int lines)
 {
 	char	*next_line;
 	int		gnl_fd;
@@ -42,6 +39,11 @@ void	check_the_line(char **check_array, char *fd, int lines)
 
 	check = 2;
 	gnl_fd = open(fd, O_RDONLY);
+	if (gnl_fd <= 0)
+	{
+		printf(C_DGREY"[KO]"C_RESET" ");
+		return ;
+	}
 	i = 0;
 	while (i < lines)
 	{
