@@ -77,3 +77,34 @@ static void	check_the_line(char **check_array, char *fd, int lines)
 		printf("\t");
 	close(gnl_fd);
 }
+
+/* ====================================||==================================== *\
+||																			  ||
+||																			  ||
+||								Check Edge Cases							  ||
+||																			  ||
+||																			  ||
+\* ============get_next_line===========||==============©Othello============== */
+
+void	check_gnl_bad_fd(void)
+{
+	char	*gnl;
+	int		fd_err;
+
+	if (BUFFER_SIZE == 42)
+		print_test_name("........Bad fd");
+	else
+		printf("\t");
+	gnl = get_next_line(-1);
+	if (gnl != NULL)
+	{
+		printf(C_RED"[NULL]"C_RESET" ");
+		fd_err = errorlog_fd(1);
+		dprintf(fd_err, "======= TEST FAILED =======\n");
+		dprintf(fd_err, "Received bad fd: -1\n");
+		dprintf(fd_err, "get_next_line returned %s\n", gnl);
+		dprintf(fd_err, "\n\n");
+	}
+	else
+		printf(C_GREEN"[OK]"C_RESET" ");
+}

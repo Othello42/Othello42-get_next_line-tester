@@ -7,6 +7,7 @@ char	*get_next_line(int fd);
 
 /* test_gnl_man.c */
 void	check_gnl(char *name, char ***check_array, int num, int lines);
+void	check_gnl_bad_fd(void);
 
 /* test_gnl_bon.c */
 void	check_gnl_bonus_static(void);
