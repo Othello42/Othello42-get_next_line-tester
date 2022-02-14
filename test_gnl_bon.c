@@ -26,8 +26,8 @@ void	check_gnl_bonus_static(void)
 	int	total;
 
 	printf(C_BOLD"\nMaximum of 1 static variable"C_RESET"\n");
-	count_gnl = count_static_file(PROJECT"get_next_line"ENDFILE); //PATH
-	count_utils = count_static_file(PROJECT"get_next_line_utils"ENDFILE); //PATH
+	count_gnl = count_static_file(PROJECT"get_next_line"ENDFILE);
+	count_utils = count_static_file(PROJECT"get_next_line_utils"ENDFILE);
 	total = count_gnl + count_utils;
 	if (total == 0 || total == 1)
 		printf(C_GREEN"[OK]"C_RESET" ");
@@ -35,8 +35,8 @@ void	check_gnl_bonus_static(void)
 	{
 		printf(C_RED"A total of "C_WHITE"%i"C_RED" static variables have been detected."C_RESET"\n", total);
 		printf(C_YELLOW"Manual check is required for false positives!"C_RESET"\n");
-		printf(C_RED"%s\t"C_WHITE"%i"C_RED" static variables have been detected."C_RESET"\n", PROJECT"get_next_line.c", count_gnl); //PATH
-		printf(C_RED"%s\t"C_WHITE"%i"C_RED" static variables have been detected."C_RESET"\n", PROJECT"get_next_line_utils.c", count_utils); //PATH
+		printf(C_RED"%s\t"C_WHITE"%i"C_RED" static variables have been detected."C_RESET"\n", PROJECT"get_next_line"ENDFILE, count_gnl);
+		printf(C_RED"%s\t"C_WHITE"%i"C_RED" static variables have been detected."C_RESET"\n", PROJECT"get_next_line_utils"ENDFILE, count_utils);
 	}
 }
 
