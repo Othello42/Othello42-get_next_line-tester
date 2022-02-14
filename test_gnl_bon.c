@@ -126,6 +126,8 @@ void	check_gnl_bonus_random(void)
 	int		i;
 	char	*next_line;
 	int		fd_err;
+	int	len_ca;
+	int	len_gnl;
 
 	check_array = create_check_array();
 	create_bonus_check_array(check_array);
@@ -139,17 +141,37 @@ void	check_gnl_bonus_random(void)
 	srandom(time(0));
 	while (i <= 42)
 	{
+		len_ca = 0;
+		len_gnl = 0;
 		random_check = (random() % 5);
 		next_line = get_next_line(gnl_fd[random_check]);
-		if (strcmp(next_line, check_array[random_check][check_fd[random_check]]) != 0)
+		if (next_line != check_array[random_check][check_fd[random_check]])
 		{
-			printf(C_RED"[KO]"C_RESET" ");
-			fd_err = errorlog_fd(1);
-			dprintf(fd_err, "======= TEST FAILED =======\n");
-			dprintf(fd_err, "File:\t\t\tfd_bonus%i\n", random_check);
-			dprintf(fd_err, "Line:\t\t\t%i\n\n", check_fd[random_check] + 1);
-			dprintf(fd_err, "expected(%lu):\t\t%s\n", strlen(check_array[random_check][check_fd[random_check]]), check_array[random_check][check_fd[random_check]]);
-			dprintf(fd_err, "get_next_line(%lu):\t%s\n", strlen(next_line), next_line);
+			if (next_line == NULL || check_array[random_check][check_fd[random_check]] == NULL)
+			{	
+				printf(C_RED"[NULL]"C_RESET" ");
+				if (check_array[random_check][check_fd[random_check]] != NULL)
+					len_ca = strlen(check_array[random_check][check_fd[random_check]]);
+				if (next_line != NULL)
+					len_gnl = strlen(next_line);				fd_err = errorlog_fd(1);
+				dprintf(fd_err, "======= TEST FAILED =======\n");
+				dprintf(fd_err, "File:\t\t\tfd_bonus%i\n", random_check);
+				dprintf(fd_err, "Line:\t\t\t%i\n\n", check_fd[random_check] + 1);
+				dprintf(fd_err, "expected(%i):\t\t%s\n", len_ca, check_array[random_check][check_fd[random_check]]);
+				dprintf(fd_err, "get_next_line(%i):\t%s\n", len_gnl, next_line);
+			}
+			else if (strcmp(next_line, check_array[random_check][check_fd[random_check]]) != 0)
+			{
+				printf(C_RED"[KO]"C_RESET" ");
+				fd_err = errorlog_fd(1);
+				dprintf(fd_err, "======= TEST FAILED =======\n");
+				dprintf(fd_err, "File:\t\t\tfd_bonus%i\n", random_check);
+				dprintf(fd_err, "Line:\t\t\t%i\n\n", check_fd[random_check] + 1);
+				dprintf(fd_err, "expected(%i):\t\t%s\n", len_ca, check_array[random_check][check_fd[random_check]]);
+				dprintf(fd_err, "get_next_line(%i):\t%s\n", len_gnl, next_line);
+			}
+			else
+				printf(C_GREEN"[OK]"C_RESET" ");
 		}
 		else
 			printf(C_GREEN"[OK]"C_RESET" ");
