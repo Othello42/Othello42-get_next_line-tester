@@ -28,7 +28,5 @@ int	main(void)
 	if (TEST == 8)
 		check_gnl_bad_fd();
 	if (BUFFER_SIZE == 0xffff)
-	{
 		leak_check();
-	}	
 }

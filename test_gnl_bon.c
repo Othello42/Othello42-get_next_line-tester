@@ -26,16 +26,17 @@ void	check_gnl_bonus_static(void)
 	int	total;
 
 	printf(C_BOLD"\nMaximum of 1 static variable"C_RESET"\n");
-	count_gnl = count_static_file(PROJECT"get_next_line.c"); //PATH
-	count_utils = count_static_file(PROJECT"get_next_line_utils.c"); //PATH
+	count_gnl = count_static_file(PROJECT"get_next_line"ENDFILE); //PATH
+	count_utils = count_static_file(PROJECT"get_next_line_utils"ENDFILE); //PATH
 	total = count_gnl + count_utils;
 	if (total == 0 || total == 1)
 		printf(C_GREEN"[OK]"C_RESET" ");
 	else
 	{
 		printf(C_RED"A total of "C_WHITE"%i"C_RED" static variables have been detected."C_RESET"\n", total);
-		printf(C_RED"%s\t\t"C_WHITE"%i"C_RED" static variables have been detected."C_RESET"\n", "get_next_line.c", count_gnl); //PATH
-		printf(C_RED"%s\t"C_WHITE"%i"C_RED" static variables have been detected."C_RESET"\n", "get_next_line_utils.c", count_utils); //PATH
+		printf(C_YELLOW"Manual check is required for false positives!"C_RESET"\n");
+		printf(C_RED"%s\t"C_WHITE"%i"C_RED" static variables have been detected."C_RESET"\n", PROJECT"get_next_line.c", count_gnl); //PATH
+		printf(C_RED"%s\t"C_WHITE"%i"C_RED" static variables have been detected."C_RESET"\n", PROJECT"get_next_line_utils.c", count_utils); //PATH
 	}
 }
 
@@ -99,7 +100,7 @@ static int	counter(char *buff)
 		if (brackets > 0)
 		{
 			if (buff[i] == 's')
-				if (strnstr(&buff[i], "static", 6) != NULL)
+				if (strnstr(&buff[i], "static ", 7) != NULL)
 					count++;
 		}
 		i++;
@@ -116,6 +117,7 @@ static int	counter(char *buff)
 \* ============get_next_line===========||==============©Othello============== */
 
 static void	create_bonus_check_array(char ***check_array);
+static void	check_lines(char *gnl, char* check, int file, int line);
 
 void	check_gnl_bonus_random(void)
 {
@@ -125,9 +127,6 @@ void	check_gnl_bonus_random(void)
 	int		random_check;
 	int		i;
 	char	*next_line;
-	int		fd_err;
-	int	len_ca;
-	int	len_gnl;
 
 	check_array = create_check_array();
 	create_bonus_check_array(check_array);
@@ -141,41 +140,9 @@ void	check_gnl_bonus_random(void)
 	srandom(time(0));
 	while (i <= 42)
 	{
-		len_ca = 0;
-		len_gnl = 0;
 		random_check = (random() % 5);
 		next_line = get_next_line(gnl_fd[random_check]);
-		if (next_line != check_array[random_check][check_fd[random_check]])
-		{
-			if (next_line == NULL || check_array[random_check][check_fd[random_check]] == NULL)
-			{	
-				printf(C_RED"[NULL]"C_RESET" ");
-				if (check_array[random_check][check_fd[random_check]] != NULL)
-					len_ca = strlen(check_array[random_check][check_fd[random_check]]);
-				if (next_line != NULL)
-					len_gnl = strlen(next_line);				fd_err = errorlog_fd(1);
-				dprintf(fd_err, "======= TEST FAILED =======\n");
-				dprintf(fd_err, "File:\t\t\tfd_bonus%i\n", random_check);
-				dprintf(fd_err, "Line:\t\t\t%i\n\n", check_fd[random_check] + 1);
-				dprintf(fd_err, "expected(%i):\t\t%s\n", len_ca, check_array[random_check][check_fd[random_check]]);
-				dprintf(fd_err, "get_next_line(%i):\t%s\n", len_gnl, next_line);
-			}
-			else if (strcmp(next_line, check_array[random_check][check_fd[random_check]]) != 0)
-			{
-				printf(C_RED"[KO]"C_RESET" ");
-				fd_err = errorlog_fd(1);
-				dprintf(fd_err, "======= TEST FAILED =======\n");
-				dprintf(fd_err, "File:\t\t\tfd_bonus%i\n", random_check);
-				dprintf(fd_err, "Line:\t\t\t%i\n\n", check_fd[random_check] + 1);
-				dprintf(fd_err, "expected(%i):\t\t%s\n", len_ca, check_array[random_check][check_fd[random_check]]);
-				dprintf(fd_err, "get_next_line(%i):\t%s\n", len_gnl, next_line);
-			}
-			else
-				printf(C_GREEN"[OK]"C_RESET" ");
-		}
-		else
-			printf(C_GREEN"[OK]"C_RESET" ");
-		free(next_line);
+		check_lines(next_line, check_array[random_check][check_fd[random_check]], random_check, check_fd[random_check] + 1);
 		check_fd[random_check]++;
 		if (check_fd[random_check] > 12)
 			break ;
@@ -188,6 +155,33 @@ void	check_gnl_bonus_random(void)
 	close(gnl_fd[2]);
 	close(gnl_fd[3]);
 	close(gnl_fd[4]);
+}
+
+static void	check_lines(char *gnl, char* check, int file, int line)
+{
+	int	fd_err;
+
+	if (gnl != check && (gnl == NULL || check == NULL))
+		printf(C_RED"[NULL]"C_RESET" ");
+	else if (gnl != NULL)
+	{
+		if (strcmp(gnl, check) != 0)
+		{
+			printf(C_RED"[KO]"C_RESET" ");
+			fd_err = errorlog_fd(1);
+			dprintf(fd_err, "======= TEST FAILED =======\n");
+			dprintf(fd_err, "File:\t\t\tfd_bonus%i\n", file);
+			dprintf(fd_err, "Line:\t\t\t%i\n\n", line);
+			dprintf(fd_err, "expected(%lu):\t\t%s\n", strlen(check), check);
+			dprintf(fd_err, "get_next_line(%lu):\t%s\n", strlen(gnl), gnl);
+		}
+		else
+			printf(C_GREEN"[OK]"C_RESET" ");
+	}
+	else if (gnl == NULL && check == NULL)
+		printf(C_GREEN"[OK]"C_RESET" ");
+	free(gnl);
+	free(check);
 }
 
 static void	create_bonus_check_array(char ***check_array)

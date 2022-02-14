@@ -34,16 +34,16 @@ b: frame bonus
 
 man: headman headbuff
 	@TEST=1 ; while [[ $$TEST -le 8 ]] ; do \
-		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=42  -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
-		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=1 -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
-		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=10 -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
-		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=0xffff -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
+		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=42  -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -D ENDFILE='".c"' -o test.out && ./test.out;\
+		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=1 -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -D ENDFILE='".c"' -o test.out && ./test.out;\
+		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=10 -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -D ENDFILE='".c"' -o test.out && ./test.out;\
+		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=0xffff -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -D ENDFILE='".c"' -o test.out && ./test.out;\
 		((TEST = TEST + 1)) ; \
 	done
 
 bonus: headbon
 ifneq ("$(wildcard $(SRC_BON_FT)) $(SRC_BON_HEAD))","")
-	@$(CC) $(CFLAGS) $(MN_BON) $(SRC_BON) -D BUFFER_SIZE=42 -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;
+	@$(CC) $(CFLAGS) $(MN_BON) $(SRC_BON) -D BUFFER_SIZE=42 -D PROJECT='"$(PROJECT)"' -D ENDFILE='"_bonus.c"' -o test.out && ./test.out;
 else
  ifeq ("$(wildcard $(PROJECT)get_next_line_bonus.c)","")
 	@echo "\033[38;5;196m\nCould not find \033[38;5;226mget_next_line_bonus.c\033[0m"
@@ -55,7 +55,7 @@ else
 	@echo "\033[38;5;196mCould not find \033[38;5;226mget_next_line__bonus.h\033[0m"
  endif
 	@echo "\033[38;5;196mRunning with functions \033[38;5;226mget_next_line.c\033[38;5;196m and \033[38;5;226mget_next_line_utils.c\033[38;5;196m instead.\033[0m"
-	@$(CC) $(CFLAGS) $(MN_BON) $(SRC) -D BUFFER_SIZE=42 -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;
+	@$(CC) $(CFLAGS) $(MN_BON) $(SRC) -D BUFFER_SIZE=42 -D PROJECT='"$(PROJECT)"' -D ENDFILE='".c"' -o test.out && ./test.out;
 endif
 
 frame:
