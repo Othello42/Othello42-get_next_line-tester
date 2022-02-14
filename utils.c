@@ -166,7 +166,10 @@ void	print_error(char *fd, char *next_line, char **check_array, int i)
 	dprintf(fd_err, "BUFFER_SIZE:\t%i\n", BUFFER_SIZE);
 	dprintf(fd_err, "Line:\t\t\t%i\n\n", i + 1);
 	dprintf(fd_err, "expected(%lu):\t\t%s\n", strlen(check_array[i]), check_array[i]);
-	dprintf(fd_err, "get_next_line(%lu):\t%s\n", strlen(next_line), next_line);
+	if (next_line != NULL)
+		dprintf(fd_err, "get_next_line(%lu):\t%s\n", strlen(next_line), next_line);
+	else
+		dprintf(fd_err, "get_next_line:\t%s\n", next_line);
 }
 
 /* ====================================||==================================== *\
