@@ -1,4 +1,4 @@
-# SHELL := /bin/bash
+SHELL := /bin/sh
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
@@ -33,7 +33,7 @@ b: frame bonus
 	@rm test.out;
 
 man: headman headbuff
-	@TEST=1 ; while [[ $$TEST -le 7 ]] ; do \
+	@TEST=1 ; while [[ $$TEST -le 8 ]] ; do \
 		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=42  -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
 		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=1 -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
 		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=10 -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\

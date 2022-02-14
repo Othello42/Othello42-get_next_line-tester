@@ -26,7 +26,7 @@ int	main(void)
 	}
 	if (BANNER == 1)
 	{
-		printf(C_BOLD"\n\tNorminette:"C_RED"\n");
+		printf(C_BOLD"\n\tNorminette:"C_RESET"\n");
 		grep = system("norminette "PROJECT" | grep Error");
 		if (grep != 0)
 			printf(C_GREEN"[OK]"C_RESET"\n");
