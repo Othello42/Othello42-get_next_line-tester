@@ -33,7 +33,7 @@ b: frame bonus
 	@rm test.out;
 
 man: headman headbuff
-	@TEST=1 ; while [[ $$TEST -le 8 ]] ; do \
+	@TEST=1 ; while [[ $$TEST -le 9 ]] ; do \
 		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=42  -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -D ENDFILE='".c"' -o test.out && ./test.out;\
 		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=1 -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -D ENDFILE='".c"' -o test.out && ./test.out;\
 		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=10 -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -D ENDFILE='".c"' -o test.out && ./test.out;\
