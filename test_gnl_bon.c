@@ -143,6 +143,7 @@ void	check_gnl_bonus_random(void)
 		random_check = (random() % 5);
 		next_line = get_next_line(gnl_fd[random_check]);
 		check_lines(next_line, check_array[random_check][check_fd[random_check]], random_check, check_fd[random_check] + 1);
+		free(next_line);
 		check_fd[random_check]++;
 		if (check_fd[random_check] > 12)
 			break ;
