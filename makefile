@@ -3,27 +3,25 @@ SHELL := /bin/sh
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
-#adjust to get_next_line.c's directory location
+#adjust to get_next_line.c's directory location.
 PROJECT = ../get_next_line/
 
 #adjust if nececary to find your files.
 SRC_ALL = $(SRC_FT) $(SRC_BON_FT) $(SRC_HEAD)
-SRC =	$(SRC_FT) $(SRC_TEST)
+SRC =		$(SRC_FT) $(SRC_TEST)
 SRC_FT =	$(PROJECT)get_next_line.c\
 			$(PROJECT)get_next_line_utils.c
 SRC_HEAD =	$(PROJECT)get_next_line.h
-SRC_BON =	$(SRC_BON_FT) $(SRC_TEST)
+SRC_BON =		$(SRC_BON_FT) $(SRC_TEST)
 SRC_BON_FT =	$(PROJECT)get_next_line_bonus.c\
 				$(PROJECT)get_next_line_utils_bonus.c
-SRC_BON_HEAD = $(PROJECT)get_next_line_bonus.h
+SRC_BON_HEAD =	$(PROJECT)get_next_line_bonus.h
 
-MN_MAN = main_mandatory.c
-MN_BON = main_bonus.c
-SRC_TEST = 	utils.c\
-			test_gnl_man.c\
-			test_gnl_bon.c
+MN_MAN =	gnl_test_mandatory.c
+MN_BON =	gnl_test_bonus.c
+SRC_TEST = 	gnl_test_utils.c
 
-all: frame norm man bonus
+all: norm man bonus
 	@rm test.out;
 
 m: frame man
@@ -33,17 +31,17 @@ b: frame bonus
 	@rm test.out;
 
 man: headman headbuff
-	@TEST=1 ; while [[ $$TEST -le 9 ]] ; do \
-		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=42  -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -D ENDFILE='".c"' -o test.out && ./test.out;\
-		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=1 -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -D ENDFILE='".c"' -o test.out && ./test.out;\
-		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=10 -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -D ENDFILE='".c"' -o test.out && ./test.out;\
-		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=0xffff -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -D ENDFILE='".c"' -o test.out && ./test.out;\
+	@TEST=1 ; while [[ $$TEST -le 8 ]] ; do \
+		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=42  -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
+		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=1 -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
+		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=10 -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
+		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=0xffff -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
 		((TEST = TEST + 1)) ; \
 	done
 
 bonus: headbon
-ifneq ("$(wildcard $(SRC_BON_FT)) $(SRC_BON_HEAD))","")
-	@$(CC) $(CFLAGS) $(MN_BON) $(SRC_BON) -D BUFFER_SIZE=42 -D PROJECT='"$(PROJECT)"' -D ENDFILE='"_bonus.c"' -o test.out && ./test.out;
+ifeq ("$(wildcard $(SRC_BON_FT) $(SRC_BON_HEAD))","$(SRC_BON_FT) $(SRC_BON_HEAD)")
+	@$(CC) $(CFLAGS) $(MN_BON) $(SRC_BON) -D BUFFER_SIZE=42 -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;
 else
  ifeq ("$(wildcard $(PROJECT)get_next_line_bonus.c)","")
 	@echo "\033[38;5;196m\nCould not find \033[38;5;226mget_next_line_bonus.c\033[0m"
@@ -55,7 +53,7 @@ else
 	@echo "\033[38;5;196mCould not find \033[38;5;226mget_next_line__bonus.h\033[0m"
  endif
 	@echo "\033[38;5;196mRunning with functions \033[38;5;226mget_next_line.c\033[38;5;196m and \033[38;5;226mget_next_line_utils.c\033[38;5;196m instead.\033[0m"
-	@$(CC) $(CFLAGS) $(MN_BON) $(SRC) -D BUFFER_SIZE=42 -D PROJECT='"$(PROJECT)"' -D ENDFILE='".c"' -o test.out && ./test.out;
+	@$(CC) $(CFLAGS) $(MN_BON) $(SRC) -D BUFFER_SIZE=42 -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;
 endif
 
 frame:

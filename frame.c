@@ -22,11 +22,15 @@ int	main(void)
 		printf(C_ORANGE"[L"C_BLUE"K]"C_RESET"\tFunction "C_ORANGE"does"C_RESET"/"C_BLUE"doesn't"C_RESET" contain leaks at some point.\n");
 		printf("\n");
 		printf("Read "C_BLUE"errorlog.txt"C_RESET" for more information.\n\n");
-		close(open("errorlog.txt", O_TRUNC | O_CREAT, 0700));
+		close(open("errorlog.txt", O_CREAT | O_TRUNC));
 	}
 	if (BANNER == 1)
 	{
-		printf(C_BOLD"\n\tNorminette:"C_RESET"\n");
+		printf(C_BOLD"\tN");
+		fflush(NULL);
+		system("norminette -v | cut -c 2-99");
+		printf(C_RESET C_RED);
+		fflush(NULL);
 		grep = system("norminette "PROJECT" | grep Error");
 		if (grep != 0)
 			printf(C_GREEN"[OK]"C_RESET"\n");
