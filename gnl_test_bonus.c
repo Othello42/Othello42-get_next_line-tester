@@ -68,6 +68,37 @@ static int	count_static_file(int fd)
 	return (count);
 }
 
+/*
+	strnstr implemented from Libc for FreeBSD.
+	https://opensource.apple.com/source/Libc/Libc-391.2.10/string/FreeBSD/strnstr.c.auto.html.
+*/
+
+static char	*strnstr(const char *s, const char *find, size_t slen)
+{
+	char 	c;
+	char 	sc;
+	size_t	len;
+
+	if ((c = *find++) != '\0')
+	{
+		len = strlen(find);
+		do
+		{
+			do
+			{
+				if (slen-- < 1 || (sc = *s++) == '\0')
+					return (NULL);
+			}
+			while (sc != c);
+			if (len > slen)
+				return (NULL);
+		}
+		while (strncmp(s, find, len) != 0);
+		s--;
+	}
+	return ((char *)s);
+}
+
 static int	counter(char *buff)
 {
 	int	i;
@@ -130,7 +161,7 @@ static void	check_gnl_bonus_multiple_fd(void)
 	int		lines[5] = {0, 0, 0, 0, 0};
 	char	***check_array;
 
-	check_array = (char ***)calloc(sizeof(char **), OPEN_MAX);
+	check_array = (char ***)calloc(sizeof(char **), FOPEN_MAX);
 	printf(C_BOLD"\nMultiple file descriptors, in randomized order."C_RESET"\n");
 	open1_and_close2((int *)fd, 1);
 	add_fds_to_array((int *)lines, check_array, (int *) fd);

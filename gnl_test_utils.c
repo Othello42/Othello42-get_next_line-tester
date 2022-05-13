@@ -52,7 +52,7 @@ void	free_check_array(char ***check_array)
 
 	fd = 0;
 	line = 0;
-	while (fd < OPEN_MAX)
+	while (fd < FOPEN_MAX)
 	{
 		if (check_array[fd])
 		{
