@@ -4,10 +4,10 @@
 
 # include "h_colors.h"
 
-# include <stdlib.h>	//calloc, random, free, system, signal, exit
-# include <stdio.h>	//printf
-# include <fcntl.h>	//open
-# include <limits.h>	//OPEN_MAX
+# include <stdlib.h>	//calloc, random, free, system, exit
+# include <signal.h>	//signal
+# include <stdio.h>		//printf, FOPEN_MAX
+# include <fcntl.h>		//open
 # include <unistd.h>	//read, close
 # include <string.h>	//strcmp, memcpy, strlen
 

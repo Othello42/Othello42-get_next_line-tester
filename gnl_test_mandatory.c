@@ -50,7 +50,7 @@ static void	check_gnl(char *name, int tests)
 		printf(C_DGREY"[KO]"C_RESET" ");
 		return ;
 	}
-	check_array = (char ***)calloc(sizeof(char **), OPEN_MAX);
+	check_array = (char ***)calloc(sizeof(char **), FOPEN_MAX);
 	create_check_array(check_array, fd);
 	run_gnl_tests(name, check_array, fd, tests);
 	close(fd);
