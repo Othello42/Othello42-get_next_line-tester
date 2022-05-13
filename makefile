@@ -1,4 +1,4 @@
-SHELL := /bin/sh
+SHELL := /bin/bash
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
