@@ -22,7 +22,7 @@ int	main(void)
 		printf(C_ORANGE"[L"C_BLUE"K]"C_RESET"\tFunction "C_ORANGE"does"C_RESET"/"C_BLUE"doesn't"C_RESET" contain leaks at some point.\n");
 		printf("\n");
 		printf("Read "C_BLUE"errorlog.txt"C_RESET" for more information.\n\n");
-		close(open("errorlog.txt", O_CREAT | O_TRUNC));
+		close(open("errorlog.txt", O_CREAT | O_TRUNC, 0666));
 	}
 	if (BANNER == 1)
 	{
