@@ -164,8 +164,8 @@ int	errorlog_fd(int command)
 
 void	ft_error(int num)
 {
-	if(num == 11)
-	printf(C_RED"[SIGSEGV]"C_RESET" ");
+	if (num == 11)
+		printf(C_RED"[SIGSEGV]"C_RESET" ");
 	exit (0);
 }
 
@@ -197,8 +197,8 @@ void	leak_check_apple(int should)
 	fd = open("temp_leaks_gnl", O_RDONLY);
 	read (fd, buff, 99);
 	close (fd);
-	if (BUFFER_SIZE == 0xffff)
-		printf("\t");
+	if (BUFFER_SIZE == 0xfffffff)
+		printf("\t\t");
 	if (strncmp(buff, " 0 leaks for 0 total leaked bytes.", 34) != 0)
 	{
 		if (should == 1)

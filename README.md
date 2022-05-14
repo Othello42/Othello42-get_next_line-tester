@@ -11,6 +11,6 @@ Adjust PROJECT to where to find the files.
 
 ## Running
 Test everything:          make  
-Test without recompile:   make a  
+Test mandatory and bonus: make a  
 Test mandatory:           make m  
 Test bonus:               make b  

@@ -4,12 +4,17 @@
 
 # include "h_colors.h"
 
-# include <stdlib.h>	//calloc, random, free, system, signal, exit
-# include <stdio.h>	//printf
-# include <fcntl.h>	//open
+# include <stdlib.h>	//calloc, random, free, system, exit
+# include <stdio.h> //printf, FOPEN_MAX(linux)
+# include <fcntl.h> //open
 # include <limits.h>	//OPEN_MAX
 # include <unistd.h>	//read, close
 # include <string.h>	//strcmp, memcpy, strlen
+# include <signal.h>	//signal
+
+# ifndef OPEN_MAX
+#  define OPEN_MAX FOPEN_MAX //FOPEN_MAX(linux)
+# endif
 
 /* ====================================||==================================== *\
 ||								 	Function								  ||

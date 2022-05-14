@@ -33,7 +33,7 @@ int	main(void)
 		check_gnl("file/fd_Empty File", 1);
 	if (TEST == 8)
 		check_gnl_bad_fd();
-	if (BUFFER_SIZE == 0xffff)
+	if (BUFFER_SIZE == 0xfffffff)
 		leak_check();
 }
 

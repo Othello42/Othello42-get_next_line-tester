@@ -1,4 +1,4 @@
-SHELL := /bin/sh
+SHELL := /bin/bash
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
@@ -24,6 +24,9 @@ SRC_TEST = 	gnl_test_utils.c
 all: norm man bonus
 	@rm test.out;
 
+a: frame man bonus
+	@rm test.out;
+
 m: frame man
 	@rm test.out;
 
@@ -32,10 +35,11 @@ b: frame bonus
 
 man: headman headbuff
 	@TEST=1 ; while [[ $$TEST -le 8 ]] ; do \
-		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=42  -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
-		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=1 -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
-		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=10 -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
-		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=0xffff -D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
+		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=42 			-D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
+		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=1			-D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
+		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=10			-D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
+		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=0xffff		-D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
+		$(CC) $(CFLAGS) $(MN_MAN) $(SRC) -D BUFFER_SIZE=0xfffffff	-D TEST=$$TEST -D PROJECT='"$(PROJECT)"' -o test.out && ./test.out;\
 		((TEST = TEST + 1)) ; \
 	done
 

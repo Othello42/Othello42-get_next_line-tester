@@ -1,9 +1,9 @@
 #include "h_get_next_line_check.h"
 #include "h_colors.h"
 
-#include <fcntl.h>  //open
-#include <unistd.h> //close
-#include <stdlib.h> //system
+#include <fcntl.h>	//open
+#include <unistd.h>	//close
+#include <stdlib.h>	//system
 
 int	main(void)
 {
@@ -41,5 +41,5 @@ int	main(void)
 	if (BANNER == 3)
 		printf(C_BOLD"\n\n\tBonus part"C_RESET" ");
 	if (BANNER == 4)
-		printf(C_BLUE"BUFFER_SIZE"C_BOLD"\t 42\t  1\t 10\t0xffff\tLeaks"C_RESET" ");
+		printf(C_BLUE"BUFFER_SIZE"C_BOLD"\t 42\t  1\t 10\t0xffff\t0xfffffff\tLeaks"C_RESET" ");
 }

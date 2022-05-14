@@ -68,6 +68,41 @@ static int	count_static_file(int fd)
 	return (count);
 }
 
+/* ====================================||==================================== *\
+||									strnstr									  ||
+||							 (added from string.h)							  ||
+||																			  ||
+||					  Implemented for compatability from:					  ||
+|/																			  \|
+https://opensource.apple.com/source/Libc/Libc-391.2.10/string/FreeBSD/strnstr.c.auto.html
+|\																			  /|
+\* ============get_next_line===========||==============©Othello============== */
+
+char	*strnstr(const char *s, const char *find, size_t slen)
+{
+	char c, sc;
+	size_t len;
+
+	if ((c = *find++) != '\0')
+	{
+		len = strlen(find);
+		do
+		{
+			do
+			{
+				if ((sc = *s++) == '\0' || slen-- < 1)
+					return (NULL);
+			}
+			while (sc != c);
+				if (len > slen)
+					return (NULL);
+		}
+		while (strncmp(s, find, len) != 0);
+			s--;
+	}
+	return ((char *)s);
+}
+
 static int	counter(char *buff)
 {
 	int	i;
